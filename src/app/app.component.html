@@ -1,0 +1,50 @@
+<!--  <div class="headerDiv">
+    <img class="logo" src="./assets/rps_white.png" id="headerLogo" />
+    <i class="fa fa-user-circle-o" id="headerUserIco" aria-hidden="true"></i>
+  </div>
+-->
+<div *ngIf="availableDevices">
+  <select>
+      <option value="" [selected]="!selectedDevice">No Device</option>
+      <option *ngFor="let device of availableDevices" [value]="device.deviceId" [selected]="selectedDevice && device.deviceId === selectedDevice.deviceId">{{ device.label }}</option>
+  </select>
+</div>
+
+<div [hidden]="!hasCameras">
+
+  <zxing-scanner #scanner class="test-class" start="true" [device]="selectedDevice" [formats]="allowedFormats" (scanSuccess)="handleQrCodeResult($event)"></zxing-scanner>
+
+  <h2 *ngIf="!this.selectedDevice">No camera selected.</h2>
+
+  <p>
+      Result:
+      <strong>{{ qrResultString }}</strong>
+  </p>
+  
+
+</div>
+
+<div *ngIf="!hasCameras && hasPermission === true">
+
+  <h1>Looks like your actual device does not has cameras.. </h1>
+
+</div>
+
+<div class="row">
+    <div class="col-2">
+     <div class="alignItems">
+        <label class="barcode">Barcode</label>
+        <input class="barcode" type="text" id="barcode" name="barcode" readonly value="{{qrResultString}}" />           
+      </div>
+    </div>
+
+  <div>
+    <button class="btn btn-primary btn-lg buttonMargin" type="button" (click)="onStart()">Start</button>
+    <button class="btn btn-secondary btn-lg buttonMargin" type="button" (click)="onStop()">Stop</button>  
+  </div>
+
+  <div>
+    <video #video class="video" controls playsinline [hidden]="videoHidden" > </video>
+  </div>
+
+</div>
